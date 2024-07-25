@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Amikom Yogyakarta</title>
+    <style>
+        body {
+            background-color: #007BFF;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        .btn:hover {
+            background-color: #003d82;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid white;
+            padding: 10px;
+        }
+        th {
+            background-color: #0056b3;
+        }
+        th, td {
+            text-align: center;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        .form-group label {
+            display: block;
+            margin: 5px 0;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Universitas Amikom Yogyakarta</h1>
+        </div>
+
+        <div class="menu">
+            <button class="btn" onclick="showContent('login-form')">Login</button>
+            <button class="btn" onclick="showContent('data-dosen')">Data Dosen</button>
+            <button class="btn" onclick="showContent('profile')">Profile</button>
+            <button class="btn" onclick="showContent('rekap-nilai')">Rekap Nilai</button>
+        </div>
+
+        <div id="login-form" class="content login-form">
+            <h2>Silahkan Login dengan Username dan Password Anda</h2>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <button class="btn">Submit</button>
+        </div>
+
+        <div id="data-dosen" class="content data-dosen">
+            <h2>Data Dosen</h2>
+            <div class="form-group">
+                <label for="nama-dosen">Nama Dosen</label>
+                <input type="text" id="nama-dosen" name="nama-dosen">
+            </div>
+            <div class="form-group">
+                <label for="matkul">Mata Kuliah</label>
+                <input type="text" id="matkul" name="matkul">
+            </div>
+            <button class="btn" onclick="addDosen()">Tambah Data Dosen</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Nama Dosen</th>
+                        <th>Mata Kuliah</th>
+                    </tr>
+                </thead>
+                <tbody id="dosenTableBody">
+                    <!-- Rows will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <div id="profile" class="content profile">
+            <h2>Profile</h2>
+            <div class="form-group">
+                <label for="nama-profile">Nama</label>
+                <input type="text" id="nama-profile" name="nama-profile">
+            </div>
+            <div class="form-group">
+                <label for="nim-profile">NIM</label>
+                <input type="text" id="nim-profile" name="nim-profile">
+            </div>
+            <div class="form-group">
+                <label for="email-profile">Email</label>
+                <input type="email" id="email-profile" name="email-profile">
+            </div>
+            <button class="btn">Update Profile</button>
+        </div>
+
+        <div id="rekap-nilai" class="content rekap-nilai">
+            <h2>Rekap Nilai</h2>
+            <div class="form-group">
+                <label for="nama">Nama</label>
+                <input type="text" id="nama" name="nama">
+            </div>
+            <div class="form-group">
+                <label for="nim">NIM</label>
+                <input type="text" id="nim" name="nim">
+            </div>
+            <div class="form-group">
+                <label for="presensi">Presensi</label>
+                <input type="text" id="presensi" name="presensi">
+            </div>
+            <div class="form-group">
+                <label for="uts">UTS</label>
+                <input type="text" id="uts" name="uts">
+            </div>
+            <div class="form-group">
+                <label for="uas">UAS</label>
+                <input type="text" id="uas" name="uas">
+            </div>
+            <button class="btn" onclick="addRecord()">Tambah Data</button>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Nama</th>
+                        <th>NIM</th>
+                        <th>Presensi</th>
+                        <th>UTS</th>
+                        <th>UAS</th>
+                    </tr>
+                </thead>
+                <tbody id="nilaiTableBody">
+                    <!-- Rows will be added here dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function showContent(sectionId) {
+            var contents = document.querySelectorAll('.content');
+            contents.forEach(function(content) {
+                content.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        function addDosen() {
+            var namaDosen = document.getElementById('nama-dosen').value;
+            var matkul = document.getElementById('matkul').value;
+
+            var table = document.getElementById('dosenTableBody');
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+
+            row.insertCell(0).innerHTML = rowCount + 1;
+            row.insertCell(1).innerHTML = namaDosen;
+            row.insertCell(2).innerHTML = matkul;
+
+            // Clear input fields
+            document.getElementById('nama-dosen').value = '';
+            document.getElementById('matkul').value = '';
+        }
+
+        function addRecord() {
+            var nama = document.getElementById('nama').value;
+            var nim = document.getElementById('nim').value;
+            var presensi = document.getElementById('presensi').value;
+            var uts = document.getElementById('uts').value;
+            var uas = document.getElementById('uas').value;
+
+            var table = document.getElementById('nilaiTableBody');
+            var rowCount = table.rows.length;
+            var row = table.insertRow(rowCount);
+
+            row.insertCell(0).innerHTML = rowCount + 1;
+            row.insertCell(1).innerHTML = nama;
+            row.insertCell(2).innerHTML = nim;
+            row.insertCell(3).innerHTML = presensi;
+            row.insertCell(4).innerHTML = uts;
+            row.insertCell(5).innerHTML = uas;
+
+            // Clear input fields
+            document.getElementById('nama').value = '';
+            document.getElementById('nim').value = '';
+            document.getElementById('presensi').value = '';
+            document.getElementById('uts').value = '';
+            document.getElementById('uas').value = '';
+        }
+    </script>
+</body>
+</html>
